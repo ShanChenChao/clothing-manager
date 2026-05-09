@@ -207,7 +207,7 @@ input,textarea,select,button{font-family:inherit;font-size:inherit;color:inherit
     <div class="header-title">我的衣橱</div>
     <div class="header-actions">
       <button class="header-icon-btn" id="menuBtn" aria-label="菜单">⋯</button>
-      <button class="header-add-btn" id="addBtn" aria-label="添加衣物">+</button>
+      <button class="header-add-btn" id="addBtn" aria-label="添加衣物" onclick="window._addNewItem()">+</button>
     </div>
   </header>
 
@@ -394,6 +394,14 @@ input,textarea,select,button{font-family:inherit;font-size:inherit;color:inherit
 <script>
 (function(){
 'use strict';
+
+// Emergency fallback - expose handler at the very top
+window._addNewItem = function(){
+  var fm = document.getElementById('formModal');
+  if(fm) fm.classList.add('active');
+  var ft = document.getElementById('formTitle');
+  if(ft) ft.textContent = '添加衣物';
+};
 
 const DB_NAME = 'ClosetDB';
 const DB_VER = 1;
@@ -921,15 +929,20 @@ document.getElementById('importConfirm').addEventListener('click',doImport);
 document.getElementById('importOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget){document.getElementById('importOverlay').classList.remove('active');importCache=null}});
 
 /* ---- Init ---- */
-(async function init(){
-  try{
-    await openDB();
-    await loadData();
-  }catch(e){
-    console.error(e);
-    document.getElementById('closet').innerHTML=`<div style="text-align:center;padding:40px;color:var(--danger)">初始化失败：${e.message}</div>`;
-  }
-})();
+document.addEventListener('DOMContentLoaded', function() {
+  (async function init(){
+    try{
+      await openDB();
+      await loadData();
+    }catch(e){
+      console.error(e);
+      document.getElementById('closet').innerHTML=`<div style="text-align:center;padding:40px;color:var(--danger)">初始化失败：${e.message}</div>`;
+    }
+  })();
+});
+
+// Expose for inline onclick (override fallback)
+window._addNewItem = function(){ openForm(null); };
 
 })();
 </script>
