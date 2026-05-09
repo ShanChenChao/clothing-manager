@@ -650,7 +650,7 @@ function openForm(item){
   document.getElementById('f_price').value = item&&item.price!=null?item.price:'';
   document.getElementById('f_material').value = item?item.material||'':'';
   document.getElementById('f_purchaseDate').value = item?item.purchaseDate||'':'';
-  document.getElementById('f_notes').value = item?item.notes||'';
+  document.getElementById('f_notes').value = item?item.notes||'':'';
 
   // Season checkboxes
   document.querySelectorAll('.season-label').forEach(el=>{
